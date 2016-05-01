@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
 {
 
     //argument test
-    cout << "There are " << argc << " arguments:\n";
+    //cout << "There are " << argc << " arguments:\n";
 
     // Loop through each argument and print its number and value
     for (int count=0; count < argc; ++count)
@@ -58,14 +58,14 @@ int main(int argc, char *argv[])
         iss >> temp;
         hextemp = stol(temp,0,16);
 
-        cout << "dir: " << hex << hextemp << "."  << endl;
+        //cout << "dir: " << hex << hextemp << "."  << endl;
         iss >> temp;
 
         int setval=hextemp%setsize;//This is the index in mem hier. To know which set
-        cout << "index: " << hex << setval << "."  << endl;
+        //cout << "index: " << hex << setval << "."  << endl;
 
         long tagval=hextemp/(blockcount*associativity);//This is the tag in mem hier.
-        cout << "tag: " << hex << tagval << "."  << endl;
+        //cout << "tag: " << hex << tagval << "."  << endl;
 
         for (int i = 0; i < blocksize; ++i)
         {
@@ -73,13 +73,13 @@ int main(int argc, char *argv[])
             {
                 memarray[setval][i]=tagval;
                 misses++;
-                cout << "Oblig. Miss"<< endl;
+                //cout << "Oblig. Miss"<< endl;
                 break;
             } else
             {
                 if (tagval==memarray[setval][i])//Hit
                 {
-                    cout << "Hit"<< endl;
+                    //cout << "Hit"<< endl;
                     break;
                 }
                 else
@@ -92,14 +92,14 @@ int main(int argc, char *argv[])
 
                         }
                         memarray[setval][blocksperset-1] = tagval;
-                        cout << "Full Miss"<< endl;
+                        //cout << "Full Miss"<< endl;
                         misses++;
                     }
                 }
             }
         }
-        cout << "R/W: "<< temp << "."  << endl;
-        cout << endl;
+        //cout << "R/W: "<< temp << "."  << endl;
+        //cout << endl;
     }
 
     cout << "Misses: "<< dec << misses << endl;
@@ -107,34 +107,6 @@ int main(int argc, char *argv[])
     double mrate = (float)misses/(float)count;
     //cout << setprecision(2) << fixed;
     cout << "Miss Rate: " <<  mrate << endl;
-
-    //Gnuplot gp; /* create GNUplot object gp */
-
-//    std::default_random_engine eng((std::random_device())());
-//    std::vector<int> histo (10,0); /* save the random numbers */
-//    std::vector<int> ref (10,0); /* reference for the plot */
-//
-//
-//    for (int i = 0; i < 50; ++i)/* ask for 50 random numbers */
-//    {
-//        int v = eng() % 10 ;
-//        histo[v]++;
-//    }
-//    for (int i = 0; i < 10; ++i)/* ask for 50 random numbers */
-//    {
-//        ref[i]=i;
-//        std::cout << histo[i] << " de " << ref[i] << std::endl;
-//    }
-//    //std::cout << boost::make_tuple(ref,histo);
-//
-//    /* Set plotting style*/
-//    gp << "set boxwidth 0.5 \n";
-//    gp << "set style fill solid \n";
-//    gp << "set yrange [0:11] \n";
-//    gp << "set ytics 1 \n";
-//    gp << "plot '-' using 2: xtic(1) with boxes title 'Holis'\n";
-//    /* send the tuple with the quantity and tag of the random numbers */
-//    gp.send1d(boost::make_tuple(ref,histo));
 
     //std::cout << "Press enter to exit." << std::endl;
 	//std::cin.get();
