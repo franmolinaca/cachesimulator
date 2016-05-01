@@ -11,7 +11,7 @@ To run: ./cache.o <memory file> <associativity> <cache size> <block size>
 #include <sstream>
 #include <fstream> /* read file*/
 #include <random> /* cpp11 random by hardware */
-#include "gnuplot-iostream/gnuplot-iostream.h" /* GNUplot plotting library */
+//#include "gnuplot-iostream/gnuplot-iostream.h" /* GNUplot plotting library */
 #include <algorithm> /*array shifting*/
 #include <iomanip> /* decimal cout*/
 
