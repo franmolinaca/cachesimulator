@@ -21,7 +21,7 @@ TARGET = cache
 
 #Reglas a ejecutar cuando se ejecute make
 all: 
-	$(CC) $(LFLAGS) $(OBJS) -o $(TARGET) -std=c++11 -lboost_iostreams -lboost_system 
+	$(CC) $(OBJS) -o $(TARGET) -std=c++11 -lboost_iostreams -lboost_system 
 
 #Al digitar make clean se borraran todos los archivos compilados,
 #note el -f en rm si no sabe para que sirve use el manueal de rm.
