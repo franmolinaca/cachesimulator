@@ -12,6 +12,10 @@ To run: ./cache.o <memory file> <associativity> <cache size> <block size>
 #include <fstream> /* read file*/
 #include <random> /* cpp11 random by hardware */
 #include "gnuplot-iostream/gnuplot-iostream.h" /* GNUplot plotting library */
+#include <algorithm> /*array shifting*/
+#include <iomanip> /* decimal cout*/
+
+
 
 
 using namespace std;
@@ -21,41 +25,88 @@ int main(int argc, char *argv[])
 {
 
     //argument test
-    std::cout << "There are " << argc << " arguments:\n";
+    cout << "There are " << argc << " arguments:\n";
 
     // Loop through each argument and print its number and value
     for (int count=0; count < argc; ++count)
-        std::cout << count << " " << argv[count] << '\n';
+        cout << count << " " << argv[count] << '\n';
 
     //Open the file given in the first argument
     ifstream myfile(argv[1]);   //open to read
     string line,temp;                //string: <hex memory address> <L/S>
     int misses=0,count=0;
     long hextemp;
-    int associativity=atoi(argv[2]);
-    int cachesize=atoi(argv[3]);
-    int blocksize=atoi(argv[4]);
-    int blockcount=(cachesize/blocksize);
-    int sets=blockcount/associativity;
-    int blocksperset=blockcount/sets;
+    const int associativity=atoi(argv[2]);
+    const int cachesize=atoi(argv[3]);
+    const int blocksize=atoi(argv[4]);
+    const int blockcount=(cachesize/blocksize);
+    const int setsize=blockcount/associativity;
+    const int blocksperset=blockcount/setsize;
+    cout << "blkcnt: " << blockcount << "."  << endl;
 
-    long memarray[1+sets][]
+    //cout << "sets: " << setsize << "."  << endl;
+    //cout << "blksperset: " << blocksperset << "."  << endl <<endl;
+
+
+    vector <vector <long>> memarray(setsize,vector<long>(blocksperset));//saves first position of the block of memory brought
 
 
     while (getline(myfile, line))/* Get a line and save it in a string */
     {
         count++;
         istringstream iss(line);
-        while (iss >> temp)
-        {
-            hextemp = stol(temp,0,16);
-            cout << "Hex: " << hex << hextemp << "."  << endl;
-            iss >> temp;
-            cout << "R/W: "<< temp << "."  << endl;
-        }
-    }
-    cout << dec << count << endl;
+        iss >> temp;
+        hextemp = stol(temp,0,16);
 
+        cout << "dir: " << hex << hextemp << "."  << endl;
+        iss >> temp;
+
+        int setval=hextemp%setsize;//This is the index in mem hier. To know which set
+        cout << "index: " << hex << setval << "."  << endl;
+
+        long tagval=hextemp/(blockcount*associativity);//This is the tag in mem hier.
+        cout << "tag: " << hex << tagval << "."  << endl;
+
+        for (int i = 0; i < blocksize; ++i)
+        {
+            if (memarray[setval][i]==0)//Miss, set is not full
+            {
+                memarray[setval][i]=tagval;
+                misses++;
+                cout << "Oblig. Miss"<< endl;
+                break;
+            } else
+            {
+                if (tagval==memarray[setval][i])//Hit
+                {
+                    cout << "Hit"<< endl;
+                    break;
+                }
+                else
+                {
+                    if (i==blocksize-1)//miss
+                    {
+                        for (int j = 0; j < blocksperset-2; ++j)//FIFO
+                        {
+                            memarray[setval][j] = memarray[setval][j+1];
+
+                        }
+                        memarray[setval][blocksperset-1] = tagval;
+                        cout << "Full Miss"<< endl;
+                        misses++;
+                    }
+                }
+            }
+        }
+        cout << "R/W: "<< temp << "."  << endl;
+        cout << endl;
+    }
+
+    cout << "Misses: "<< dec << misses << endl;
+    cout << "Count: "<< dec << count << endl;
+    double mrate = (float)misses/(float)count;
+    //cout << setprecision(2) << fixed;
+    cout << "Miss Rate: " <<  mrate << endl;
 
     //Gnuplot gp; /* create GNUplot object gp */
 
