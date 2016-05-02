@@ -24,12 +24,11 @@ using namespace std;
 int main(int argc, char *argv[])
 {
 
-    //argument test
+    //Argument test
     //cout << "There are " << argc << " arguments:\n";
-
     // Loop through each argument and print its number and value
-    for (int count=0; count < argc; ++count)
-        cout << count << " " << argv[count] << '\n';
+    //for (int count=0; count < argc; ++count)
+    //    cout << count << " " << argv[count] << '\n';
 
     //Open the file given in the first argument
     ifstream myfile(argv[1]);   //open to read
