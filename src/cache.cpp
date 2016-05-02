@@ -39,15 +39,15 @@ int main(int argc, char *argv[])
     const int cachesize=atoi(argv[3]);
     const int blocksize=atoi(argv[4]);
     const int blockcount=(cachesize/blocksize);
-    const int setsize=blockcount/associativity;
-    const int blocksperset=blockcount/setsize;
+    const int setquant=blockcount/associativity;//If associtivity is 1, the cache is directly mapped
+    const int blocksperset=blockcount/setquant;
     cout << "blkcnt: " << blockcount << "."  << endl;
 
-    //cout << "sets: " << setsize << "."  << endl;
+    //cout << "sets: " << setquant << "."  << endl;
     //cout << "blksperset: " << blocksperset << "."  << endl <<endl;
 
 
-    vector <vector <long>> memarray(setsize,vector<long>(blocksperset));//saves first position of the block of memory brought
+    vector <vector <long>> memarray(setquant,vector<long>(blocksperset));//saves first position of the block of memory brought
 
 
     while (getline(myfile, line))/* Get a line and save it in a string */
@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
         //cout << "dir: " << hex << hextemp << "."  << endl;
         iss >> temp;
 
-        int setval=hextemp%setsize;//This is the index in mem hier. To know which set
+        int setval=hextemp%setquant;//This is the index in mem hier. To know which set
         //cout << "index: " << hex << setval << "."  << endl;
 
         long tagval=hextemp/(blockcount*associativity);//This is the tag in mem hier.
